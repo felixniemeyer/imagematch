@@ -1,0 +1,12 @@
+1. implement viewer (ogl)
+
+2. use VLFeat for keypoint detection and description
+
+3. Store keypoints per image
+	- use arrays first. May be replaced by more intelligent datastructures later.
+
+4. Write matching: find corresponding keypoints near click
+
+5. write position derivation
+
+6. display
