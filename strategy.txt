@@ -1,12 +1,14 @@
 1. implement viewer (ogl)
 
-2. use VLFeat for keypoint detection and description
+2. use OpenCV for keypoint detection and description
 
 3. Store keypoints per image
 	- use arrays first. May be replaced by more intelligent datastructures later.
 
-4. Write matching: find corresponding keypoints near click
+4. Compute descriptors
 
-5. write position derivation
+5. Run Matching
 
-6. display
+6. derive target position
+
+7. display click position and assumed position

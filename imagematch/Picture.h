@@ -12,6 +12,8 @@ public:
 	std::vector<cv::KeyPoint> getKeyPoints();
 	cv::Mat getDescriptors();
 
+	void matchTo(cv::Mat queryDescriptors, std::vector<cv::DMatch> &matches);
+
 private:
 	char *filename;
 	cv::Mat image;

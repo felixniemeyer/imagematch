@@ -30,11 +30,16 @@ int main(int argc, char** argv)
 {
 	initModule_features2d();
 	initModule_nonfree(); 
+
+	std::cout << "Finding keypoints + matching ...\n";
 	
 	vector<Picture> pictures;
 	pictures.push_back(Picture("./img/IMG_4932.JPG"));
 	pictures.push_back(Picture("./img/IMG_4934.JPG"));
 
+	vector<DMatch> matches;
+	pictures[0].matchTo(pictures[1].getDescriptors(), matches);
+	
 	// If you would like to draw the detected keypoint just to check
 	Mat keypointvis;
 	drawKeypoints(pictures[0].getImg(), pictures[0].getKeyPoints(), keypointvis, Scalar::all(-1), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);

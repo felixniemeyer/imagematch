@@ -60,3 +60,10 @@ Picture::process()
 	// Each row in "descriptors" correspond to the SIFT descriptor for each keypoint
 	featureExtractor->compute(image, keypoints, descriptors);
 }
+
+void
+Picture::matchTo(Mat trainDescriptors, vector<DMatch> &matches)
+{
+	Ptr<DescriptorMatcher> descMatcher = DescriptorMatcher::create("BruteForce");
+	descMatcher->match(descriptors, trainDescriptors, matches);
+}
