@@ -114,5 +114,5 @@ Picture::matchTo(Mat trainDescriptors, vector<DMatch> &matches)
 	Ptr<DescriptorMatcher> descMatcher = DescriptorMatcher::create("BruteForce");
 	descMatcher->match(descriptors, trainDescriptors, allMatches);
 
-	filterMatches(allMatches, matches, 0.1f);
+	filterMatches(allMatches, matches, 0.3f);
 }

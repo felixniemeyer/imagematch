@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include "Transformer.h"
@@ -49,16 +50,18 @@ Transformer::transformPosition(int x, int y)
 
 		// 1. we want to weight keypoints less, which are farer from the click
 		// 2. we want to weight keypoints with a lower quality less
-		weights[i] = pow((imageDiagonal - sqrt(pow(positions[i].x, 2) + pow(positions[i].y, 2))),4) / connections[i].distance;
-		
+		weights[i] = (1/(1+sqrt(pow(positions[i].x, 2) + pow(positions[i].y, 2)))) / connections[i].distance;
+
+		// sum up all weights
+		weightSum += weights[i];
+
 		// transform point according to the connection
 		positions[i].rotate(connections[i].rotation);
 		positions[i].scale(connections[i].scale);
 		positions[i].add(connections[i].pB);
 		
-		// sum up all weights
-		weightSum += weights[i];
 	}
+
 	float normalizationFactor = 1 / weightSum;
 	
 	// build weighted average from all transformations
@@ -76,7 +79,7 @@ Transformer::transformPosition(int x, int y)
 void 
 Transformer::createConnection(cv::KeyPoint from, cv::KeyPoint to, cv::DMatch match, int i)
 {
-	connections[i].rotation = to.angle - from.angle;
+	connections[i].rotation = (to.angle - from.angle) * M_PI / 180; //we want radian measure
 	connections[i].scale = to.size / from.size;
 	connections[i].distance = match.distance;
 	connections[i].pA.x = from.pt.x;

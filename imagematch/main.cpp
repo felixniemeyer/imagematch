@@ -39,15 +39,21 @@ int main(int argc, char** argv)
 	initModule_features2d();
 	initModule_nonfree(); 
 
+	if (argc < 3) {
+		cout << "pass at least 2 images\n";
+	}
+	else
+	{
+		// loading and processing images
+		std::cout << "Finding keypoints + matching ...\n";
+		for (int i = 1; i < argc; ++i)
+			images.push_back(Picture(argv[i]));
+	}
+
 	namedWindow(windowMatches, CV_WINDOW_AUTOSIZE);
 	namedWindow(windowFrom, CV_WINDOW_AUTOSIZE);
 	namedWindow(windowTo, CV_WINDOW_AUTOSIZE);
-
-	// loading and processing images
-	std::cout << "Finding keypoints + matching ...\n";
-	images.push_back(Picture("./img/IMG_4932.JPG"));
-	images.push_back(Picture("./img/IMG_4934.JPG"));
-
+	
 	// initialize the transformer, so we can process clicks. 
 	selectFromTo(0, 1);
 	setMouseCallback(windowFrom, mouseClick, NULL);

@@ -22,8 +22,8 @@ public:
 		void rotate(float angle)
 		{
 			float newX, newY;
-			newX = cos(angle)*this->x + sin(angle)*this->y;
-			newY = cos(angle)*this->y - sin(angle)*this->x;
+			newX = cos(angle)*this->x - sin(angle)*this->y;
+			newY = cos(angle)*this->y + sin(angle)*this->x;
 			x = newX;
 			y = newY;
 		}
