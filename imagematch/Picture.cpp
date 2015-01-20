@@ -15,11 +15,6 @@ Picture::Picture(char* file)
 	process();
 }
 
-Picture::~Picture()
-{
-	
-}
-
 Mat 
 Picture::getImgCopy()
 {
@@ -53,7 +48,7 @@ Picture::loadImage(float f)
 	if (!imageSrc.data)                       
 		cerr << "Could not open or find the image " << filename << std::endl;
 	else
-		resize(imageSrc, image, Size(), f, f, INTER_AREA);
+		resize(imageSrc, image, Size(), f, f, INTER_AREA); // the testing images are really big - so scale them down first
 }
 
 void
@@ -70,7 +65,7 @@ Picture::process()
 	"GFTT" – GoodFeaturesToTrackDetector
 	"HARRIS" – GoodFeaturesToTrackDetector with Harris detector enabled
 	"Dense" – DenseFeatureDetector
-	"SimpleBlob" – SimpleBlobDetector*/
+	"SimpleBlob" – SimpleBlobDetector */
 	Ptr<FeatureDetector> featureDetector = FeatureDetector::create("SIFT");
 	featureDetector->detect(image, keypoints, Mat()); 
 
@@ -80,7 +75,7 @@ Picture::process()
 	"BRIEF" – BriefDescriptorExtractor
 	"BRISK" – BRISK
 	"ORB" – ORB
-	"FREAK" – FREAK*/
+	"FREAK" – FREAK */
 	Ptr<DescriptorExtractor> featureExtractor = DescriptorExtractor::create("SIFT");
 	featureExtractor->compute(image, keypoints, descriptors);
 }

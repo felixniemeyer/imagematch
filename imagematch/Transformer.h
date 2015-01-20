@@ -1,7 +1,7 @@
-// 
-// Stores matches between image A and B.
-// Can transform a position in image A to a position in image B.
-//
+/*
+Stores matches between image A and B.
+Can transform a position in image A to a position in image B.
+*/
 
 #include <vector>
 #include <opencv2/features2d/features2d.hpp>
@@ -10,8 +10,10 @@
 class Transformer
 {
 public:
+	// Stores Translation, Scale & Rotation for 2 matching keypoints. + quality of match
 	struct Connection;
 
+	// Position stores x and y for a position within an image
 	template<typename T>
 	class Position
 	{
@@ -53,10 +55,11 @@ public:
 		}
 	};
 
-	Transformer(std::vector<cv::DMatch> &matches, std::vector<cv::KeyPoint> &queryKeypoints, std::vector<cv::KeyPoint> &trainKeypoints, float imageDiagonal); //trainkeypoints are keypoints from image A,  queryKeypoints are from B
+	Transformer(std::vector<cv::DMatch> &matches, std::vector<cv::KeyPoint> &queryKeypoints, std::vector<cv::KeyPoint> &trainKeypoints, float imageDiagonal);
 	~Transformer();
 	
 	Position<int> transformPosition(int x, int y);
+
 private:
 	float imageDiagonal;
 	int numOfConnections;

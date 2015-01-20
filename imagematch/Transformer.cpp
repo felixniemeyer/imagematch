@@ -13,14 +13,14 @@ struct Transformer::Connection
 	float scale;
 };
 
-Transformer::Transformer(vector<DMatch> &matches, vector<KeyPoint> &queryKP, vector<KeyPoint> &trainKP, float diagonal)
+Transformer::Transformer(vector<DMatch> &matches, vector<KeyPoint> &queryKP, vector<KeyPoint> &trainKP, float queryImageDiagonal)
 {
-	imageDiagonal = diagonal;
-
+	imageDiagonal = queryImageDiagonal;
+	
+	// init connections
 	numOfConnections = (int)matches.size();
 	connections = new Connection[numOfConnections];
 	int connectionsIndex = 0;
-
 	for (vector<DMatch>::iterator it = matches.begin(); it != matches.end(); ++it)
 	{
 		createConnection(queryKP[it->queryIdx], trainKP[it->trainIdx], *it, connectionsIndex);
@@ -36,26 +36,33 @@ Transformer::~Transformer()
 Transformer::Position<int> 
 Transformer::transformPosition(int x, int y)
 {
-	float *weights = new float[numOfConnections]; //we want to weight keypoints less, which are farer from the click
-	Position<float> *positions = new Position<float>[numOfConnections];
+	float *weights = new float[numOfConnections]; 
 	float weightSum = 0;
+	
+	Position<float> *positions = new Position<float>[numOfConnections];
 	
 	for (int i = 0; i < numOfConnections; ++i)
 	{
-		//calc weight
+		// calculate relative position
 		positions[i].x = x - connections[i].pA.x;
 		positions[i].y = y - connections[i].pA.y;
-		weights[i] = pow((imageDiagonal - sqrt(pow(positions[i].x, 2) + pow(positions[i].y, 2))),4) / connections[i].distance; //weight depends on locality of keypoint and quality of match
-		
-		weightSum += weights[i];
-		//calc position
-	//	positions[i].rotate(connections[i].rotation);
-	//	positions[i].scale(connections[i].scale);
-		positions[i].add(connections[i].pB);
-	}
 
-	Position<float> average;
+		// 1. we want to weight keypoints less, which are farer from the click
+		// 2. we want to weight keypoints with a lower quality less
+		weights[i] = pow((imageDiagonal - sqrt(pow(positions[i].x, 2) + pow(positions[i].y, 2))),4) / connections[i].distance;
+		
+		// transform point according to the connection
+		positions[i].rotate(connections[i].rotation);
+		positions[i].scale(connections[i].scale);
+		positions[i].add(connections[i].pB);
+		
+		// sum up all weights
+		weightSum += weights[i];
+	}
 	float normalizationFactor = 1 / weightSum;
+	
+	// build weighted average from all transformations
+	Position<float> average;
 	for (int i = 0; i < numOfConnections; ++i)
 	{
 		positions[i].scale(weights[i] * normalizationFactor);
@@ -63,7 +70,6 @@ Transformer::transformPosition(int x, int y)
 	}
 
 	delete[] weights;
-
 	return average;
 }
 
