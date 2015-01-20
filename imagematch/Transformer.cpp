@@ -50,7 +50,7 @@ Transformer::transformPosition(int x, int y)
 
 		// 1. we want to weight keypoints less, which are farer from the click
 		// 2. we want to weight keypoints with a lower quality less
-		weights[i] = (1/(1+sqrt(pow(positions[i].x, 2) + pow(positions[i].y, 2)))) / connections[i].distance;
+		weights[i] = (1 / (1 + pow (positions[i].x, 2 ) + pow(positions[i].y, 2))) / connections[i].distance;
 
 		// sum up all weights
 		weightSum += weights[i];

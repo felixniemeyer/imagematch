@@ -83,7 +83,7 @@ void updatePosition(int x, int y)
 void drawMarker(char* window, int imgIndex, int x, int y)
 {
 	Mat img = images[imgIndex].getImgCopy(); // we want to draw on a copy of the original
-	rectangle(img, Point(x - 5, y - 5), Point(x + 5, y + 5), Scalar(0, 0, 255), 3, 0);
+	rectangle(img, Point(x - 5, y - 5), Point(x + 5, y + 5), Scalar(255, 255, 0), 3, 0);
 	imshow(window, img);
 }
 
